@@ -1,15 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {Device} = require("../models/db");
 const client = require("../mqtt/mqttClient");
-
-router.post("/add", async (req, res) => {
-  const { name, deviceId, type, elements, group } = req.body;
-
-  const device = new Device({ name, deviceId, type, elements, group });
-  await device.save();
-  res.json({ message: "Device added!", device });
-});
 
 router.post("/control", async (req, res) => {
   const { deviceId, action } = req.body;

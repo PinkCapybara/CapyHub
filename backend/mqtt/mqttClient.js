@@ -21,4 +21,11 @@ mqttClient.on("message", (topic, message) => {
   console.log(`Received message: ${message} from topic: ${topic}`);
 });
 
-module.exports = mqttClient
+const sendCommand = (deviceId, payload) => {
+  client.publish(`CapyHub/${deviceId}/command`, payload);
+};
+
+module.exports ={ 
+  sendCommand,
+  mqttClient
+}

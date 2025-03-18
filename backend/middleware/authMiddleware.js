@@ -1,7 +1,7 @@
-const JWT_SECRET = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const {User} = require("../models/db");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -35,6 +35,4 @@ const authMiddleware = async (req, res, next) => {
     }
 }
 
-module.exports = {
-    authMiddleware
-}
+module.exports =  authMiddleware

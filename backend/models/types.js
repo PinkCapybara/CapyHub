@@ -34,15 +34,16 @@ const loginSchema = z.object({
    🔹 GROUP SCHEMA
    #################### */
 const groupSchema = z.object({
-  name: z.string().min(3).max(50),
-  devices: z.array(objectIdSchema).optional(),
+  name: z.string().max(50),
+  owner: objectIdSchema.optional(),
+  // devices: z.array(objectIdSchema).optional()
 });
 
 /* ####################
    🔹 DEVICE SCHEMA
    #################### */
 const deviceSchema = z.object({
-  name: z.string().min(3).max(50),
+  name: z.string().max(50),
   group: objectIdSchema,
   elements: z.array(objectIdSchema).optional(),
 });
@@ -51,7 +52,7 @@ const deviceSchema = z.object({
    🔹 ELEMENT BASE SCHEMA
    #################### */
 const baseElementSchema = z.object({
-  name: z.string().min(3).max(50),
+  name: z.string().max(50),
   deviceId: objectIdSchema,
   publishTopic: topicSchema,
   subscribeTopic: topicSchema.optional(),
@@ -85,12 +86,12 @@ const sliderSchema = baseElementSchema.extend({
   subType: z.literal("slider"),
   minValue: z.number(),
   maxValue: z.number(),
-  step: z.number(),
+  value: z.number(),
 });
 
 const colorPickerSchema = baseElementSchema.extend({
   subType: z.literal("color_picker"),
-  rgb: z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Invalid RGB format"), // "#RRGGBB"
+  rgb: z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Invalid RGB format").default("#FFFFFF"), // "#RRGGBB"
 });
 
 /* ####################

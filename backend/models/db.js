@@ -54,7 +54,7 @@ const User = mongoose.model("User", UserSchema);
 
 const GroupSchema = new mongoose.Schema({
   name: String,
-  // owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   // devices: [{type: mongoose.Schema.Types.ObjectId, ref: "Device"}]
 })
 
@@ -92,7 +92,12 @@ const PushButton = Element.discriminator("push", PushButtonSchema);
 // Toggle Button
 const ToggleSchema = new mongoose.Schema({
   payloadOn: { type: String, required: true },
-  payloadOff: { type: String, required: true }
+  payloadOff: { type: String, required: true },
+  value: { 
+    type: Number, 
+    default: 0, 
+    enum: [0, 1] // Restricts values to only 0 or 1
+  }
 });
 const Toggle = Element.discriminator("toggle", ToggleSchema);
 
@@ -100,7 +105,10 @@ const Toggle = Element.discriminator("toggle", ToggleSchema);
 const SliderSchema = new mongoose.Schema({
   minValue: { type: Number, required: true },
   maxValue: { type: Number, required: true },
-  step: { type: Number, required: true }
+  value: { 
+    type: Number, 
+    default: function() { return this.minValue; } 
+  }
 });
 const Slider = Element.discriminator("slider", SliderSchema);
 
@@ -108,7 +116,8 @@ const Slider = Element.discriminator("slider", SliderSchema);
 const ColorPickerSchema = new mongoose.Schema({
   rgb: {
       type: String,  // Example: "#FF5733"
-      required: true
+      required: true,
+      default: "#FFFFFF"
   }
 });
 const ColorPicker = Element.discriminator("color_picker", ColorPickerSchema);
@@ -120,20 +129,26 @@ const ColorPicker = Element.discriminator("color_picker", ColorPickerSchema);
 // Gauges
 const GaugeSchema = new mongoose.Schema({
   minValue: { type: Number, required: true },
-  maxValue: { type: Number, required: true }
+  maxValue: { type: Number, required: true },
+  value: { 
+    type: Number, 
+    default: function() { return this.minValue; } 
+  }
 });
 const Gauge = Element.discriminator("gauge", GaugeSchema);
 
 // Widgets
 const WidgetSchema = new mongoose.Schema({
-  unit: { type: String, required: true }
+  unit: { type: String, required: true },
+  value: { type: Number, default: 0 }
 });
 const Widget = Element.discriminator("widget", WidgetSchema);
 
 // Notification
 const NotificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
-  email: { type: String, required: true }
+  email: { type: String, required: true },
+  condition: { type: String,  required: true}
 });
 const Notification = Element.discriminator("notification", NotificationSchema);
 
@@ -142,5 +157,12 @@ module.exports = {
   User,
   Group,
   Device,
-  Element
+  Element,
+  PushButton,
+  Toggle,
+  Slider,
+  ColorPicker,
+  Gauge,
+  Widget,
+  Notification
 }
