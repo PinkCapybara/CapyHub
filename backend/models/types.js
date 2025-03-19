@@ -54,7 +54,6 @@ const deviceSchema = z.object({
 const baseElementSchema = z.object({
   name: z.string().max(50),
   deviceId: objectIdSchema,
-  publishTopic: topicSchema,
   subscribeTopic: topicSchema.optional(),
   type: z.enum(["switch", "sensor"]),
   subType: z.enum([

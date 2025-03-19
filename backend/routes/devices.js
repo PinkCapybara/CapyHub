@@ -8,7 +8,7 @@ const router = new Router();
 router.get("/devices", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
-        if (!user) {
+        if (!user) { 
             return res.status(404).json({ msg: "User not found" });
         }
 
