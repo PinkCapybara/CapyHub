@@ -1,11 +1,11 @@
-const { Router } = require("express");
+const express = require("express");
 const { Group, User, Device } = require("../models/db");
-const { authMiddleware } = require("../middleware");
+const authMiddleware = require("../middleware/authMiddleware");
 const { groupSchema } = require("../models/types");
-const router = new Router();
+const router =  express.Router();
 
 // Get all groups for a user
-router.get("/groups", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId).populate("groups");
         if (!user) {
@@ -20,7 +20,7 @@ router.get("/groups", authMiddleware, async (req, res) => {
 });
 
 // Get a specific group
-router.get("/groups/:id", authMiddleware, async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
     try {
         const group = await Group.findById(req.params.id);
         if (!group) {
@@ -40,7 +40,7 @@ router.get("/groups/:id", authMiddleware, async (req, res) => {
 });
 
 // Create a new group
-router.post("/groups", authMiddleware, async (req, res) => {
+router.post("", authMiddleware, async (req, res) => {
     try {
         const { success } = groupSchema.safeParse(req.body);
         if (!success) {
@@ -61,7 +61,7 @@ router.post("/groups", authMiddleware, async (req, res) => {
 });
 
 // Update a group
-router.put("/groups/:id", authMiddleware, async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { success } = groupSchema.safeParse(req.body);
         if (!success) {
@@ -88,7 +88,7 @@ router.put("/groups/:id", authMiddleware, async (req, res) => {
 });
 
 // Delete a group
-router.delete("/groups/:id", authMiddleware, async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const group = await Group.findById(req.params.id);
         if (!group) {
@@ -114,6 +114,4 @@ router.delete("/groups/:id", authMiddleware, async (req, res) => {
     }
 });
 
-module.exports = {
-    groupRouter: router
-}
+module.exports = router;

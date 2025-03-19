@@ -5,7 +5,7 @@ const mqttClient = mqtt.connect(process.env.MQTT_BROKER_URL, {
     username: process.env.MQTT_USERNAME,
     password: process.env.MQTT_PASSWORD,
     will: {
-        topic: 'dev_status',
+        topic: 'devCapy',
         payload: 'offline',
         qos: 1,
         retain: false
@@ -14,7 +14,7 @@ const mqttClient = mqtt.connect(process.env.MQTT_BROKER_URL, {
 
 mqttClient.on("connect", () => {
   console.log("Connected to HiveMQ broker");
-  client.subscribe("homeautomation/+/status");
+  client.subscribe("devCapy");
 });
 
 mqttClient.on("message", (topic, message) => {

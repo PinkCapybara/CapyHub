@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const { Device, Group, User } = require("../models/db");
-const { authMiddleware } = require("../middleware");
+const authMiddleware = require("../middleware/authMiddleware");
 const { deviceSchema } = require("../models/types");
-const router = new Router();
+const router = Router();
 
 // Get all devices for a user
-router.get("/devices", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         if (!user) { 
@@ -21,7 +21,7 @@ router.get("/devices", authMiddleware, async (req, res) => {
 });
 
 // Getting a specific device
-router.get("/devices/:id", authMiddleware, async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         if (!user) {
@@ -46,7 +46,7 @@ router.get("/devices/:id", authMiddleware, async (req, res) => {
 });
 
 // Add a new device
-router.post("/devices", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         const { success } = deviceSchema.safeParse(req.body);
         if (!success) {
@@ -71,7 +71,7 @@ router.post("/devices", authMiddleware, async (req, res) => {
 });
 
 // Update a device
-router.put("/devices/:id", authMiddleware, async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { success } = deviceSchema.safeParse(req.body);
         if (!success) {
@@ -98,7 +98,7 @@ router.put("/devices/:id", authMiddleware, async (req, res) => {
 });
 
 // Delete a device
-router.delete("/devices/:id", authMiddleware, async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const device = await Device.findById(req.params.id);
         if (!device) {
@@ -119,6 +119,4 @@ router.delete("/devices/:id", authMiddleware, async (req, res) => {
     }
 });
 
-module.exports = {
-    deviceRouter: router
-}
+module.exports = router;

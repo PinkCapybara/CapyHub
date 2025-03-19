@@ -1,13 +1,13 @@
 const { Router } = require("express");
 const { Element, Device, Group, User } = require("../models/db");
-const { authMiddleware } = require("../middleware");
+const authMiddleware = require("../middleware/authMiddleware");
 const { elementSchema } = require("../models/types");
 const { mqttClient } = require("../mqtt/mqttClient"); 
 const isValidPayload = require("../controllers/isValidPayload");
-const router = new Router();
+const router = Router();
 
 // Get all elements across all devices under user's groups
-router.get("/elements", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         if (!user) return res.status(404).json({ msg: "User not found" });
@@ -23,7 +23,7 @@ router.get("/elements", authMiddleware, async (req, res) => {
 });
 
 // Get a specific element
-router.get("/elements/:id", authMiddleware, async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
     try {
         const element = await Element.findById(req.params.id);
         if (!element) return res.status(404).json({ msg: "Element not found" });
@@ -43,13 +43,14 @@ router.get("/elements/:id", authMiddleware, async (req, res) => {
 });
 
 // Add a new element to a device
-router.post("/elements", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         const { success } = elementSchema.safeParse(req.body);
         if (!success) return res.status(400).json({ msg: "Invalid element data" });
 
-        const { name, deviceId, type, subtype, subscribeTopic } = req.body;
-        req.body.subscribeTopic = deviceId+"/"+subscribeTopic;
+        const { deviceId, subscribeTopic } = req.body;
+        const element = req.body;
+        
         const deviceObj = await Device.findById(deviceId);
         if (!deviceObj) return res.status(404).json({ msg: "Device not found" });
 
@@ -58,7 +59,9 @@ router.post("/elements", authMiddleware, async (req, res) => {
             return res.status(403).json({ msg: "Unauthorized" });
         }
 
-        const newElement = new Element(req.body);
+        element.publishTopic = "devCapy"; 
+        element.subscribeTopic = deviceId.toString()+"/"+subscribeTopic;
+        const newElement = new Element(element);
         await newElement.save();
         res.status(201).json({ msg: "Element added", element: newElement });
     } catch (error) {
@@ -67,7 +70,7 @@ router.post("/elements", authMiddleware, async (req, res) => {
 });
 
 // Update an element and publish command to MQTT
-router.put("/elements/:id", authMiddleware, async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { success } = elementSchema.safeParse(req.body);
         if (!success) return res.status(400).json({ msg: "Invalid element data" });
@@ -98,7 +101,7 @@ router.put("/elements/:id", authMiddleware, async (req, res) => {
 });
 
 // Delete an element
-router.delete("/elements/:id", authMiddleware, async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const element = await Element.findById(req.params.id);
         if (!element) return res.status(404).json({ msg: "Element not found" });
@@ -120,7 +123,7 @@ router.delete("/elements/:id", authMiddleware, async (req, res) => {
 
 
 // Publish payload to the element on respective topic
-router.post("/elements/:id/publish", authMiddleware, async (req, res) => {
+router.post("/:id/publish", authMiddleware, async (req, res) => {
     try {
         const { payload } = req.body;
         if (!payload) return res.status(400).json({ error: "Payload is required" });
@@ -153,6 +156,4 @@ router.post("/elements/:id/publish", authMiddleware, async (req, res) => {
     }
 });
 
-module.exports = {
-    elementRouter: router
-};
+module.exports = router;

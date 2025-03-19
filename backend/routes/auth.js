@@ -1,13 +1,13 @@
 const {Router} = require("express");
-const router = new Router();
+const router = Router();
 const {User} = require("./../models/db");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const JWT_SECRET = process.env.JWT_SECRET;
-const {authMiddleware} = require("./../middleware");
 const { userSchema, loginSchema } = require("../models/types");
 
 router.post("/signup", async (req, res) => {
+    // res.send("debug");
     const inpBody = req.body;
     const {success} = userSchema.safeParse(inpBody);
     if(!success){
@@ -85,6 +85,4 @@ router.post("/signin", async (req, res) => {
     }    
 })
 
-module.exports = {
-    authRouter: router
-}
+module.exports = router;
