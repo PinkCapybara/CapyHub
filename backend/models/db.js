@@ -150,7 +150,8 @@ const Widget = Element.discriminator("widget", WidgetSchema);
 const NotificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   email: { type: String, required: true },
-  condition: { type: String,  required: true}
+  condition: { type: String,  required: true},
+  flag: { type: Boolean,  default: false},
 });
 const Notification = Element.discriminator("notification", NotificationSchema);
 

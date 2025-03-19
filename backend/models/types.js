@@ -110,6 +110,7 @@ const notificationSchema = baseElementSchema.extend({
   subType: z.literal("notification"),
   message: z.string(),
   email: z.string().email(),
+  flag: z.boolean().default(false)
 });
 
 /* ####################
