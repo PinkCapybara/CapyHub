@@ -70,12 +70,14 @@ const Device = mongoose.model("Device", DeviceSchema);
 
 const ElementSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    deviceId: { type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true },
+    device: { type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true },
+    deviceName: String,
+    groupName: String,
     publishTopic: { type: String, required: true },
-    subscribeTopic: { type: String },
+    subscribeTopic: { type: String, required: true },
     type: { type: String, enum: ["switch", "sensor"], required: true },
     subType: { type: String, enum: ["push", "toggle", "slider", "color_picker", "gauge", "widget", "notification"], required: true }
-}, { discriminatorKey: "subType", timestamps: true });
+}, { discriminatorKey: "subType"});
 
 const Element = mongoose.model("Element", ElementSchema);
 

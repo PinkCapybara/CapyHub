@@ -32,7 +32,7 @@ router.get("/:id", authMiddleware, async (req, res) => {
         if (!device) return res.status(404).json({ msg: "Device not found" });
 
         const group = await Group.findById(device.group);
-        if (!group || group.owner.toString() !== req.userId) {
+        if (!group || group.owner.toString() !== req.userId) {  
             return res.status(403).json({ msg: "Unauthorized" });
         }
 
@@ -48,10 +48,10 @@ router.post("/", authMiddleware, async (req, res) => {
         const { success } = elementSchema.safeParse(req.body);
         if (!success) return res.status(400).json({ msg: "Invalid element data" });
 
-        const { deviceId, subscribeTopic } = req.body;
+        const { device, subscribeTopic } = req.body;
         const element = req.body;
         
-        const deviceObj = await Device.findById(deviceId);
+        const deviceObj = await Device.findById(device);
         if (!deviceObj) return res.status(404).json({ msg: "Device not found" });
 
         const group = await Group.findById(deviceObj.group);
@@ -59,8 +59,10 @@ router.post("/", authMiddleware, async (req, res) => {
             return res.status(403).json({ msg: "Unauthorized" });
         }
 
+        element.deviceName = deviceObj.name;
+        element.groupName = group.name;
         element.publishTopic = "devCapy"; 
-        element.subscribeTopic = deviceId.toString()+"/"+subscribeTopic;
+        element.subscribeTopic = device.toString()+"/"+subscribeTopic;
         const newElement = new Element(element);
         await newElement.save();
         res.status(201).json({ msg: "Element added", element: newElement });

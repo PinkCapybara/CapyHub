@@ -44,8 +44,7 @@ const groupSchema = z.object({
    #################### */
 const deviceSchema = z.object({
   name: z.string().max(50),
-  group: objectIdSchema,
-  elements: z.array(objectIdSchema).optional(),
+  group: objectIdSchema
 });
 
 /* ####################
@@ -53,8 +52,8 @@ const deviceSchema = z.object({
    #################### */
 const baseElementSchema = z.object({
   name: z.string().max(50),
-  deviceId: objectIdSchema,
-  subscribeTopic: topicSchema.optional(),
+  device: objectIdSchema,
+  subscribeTopic: topicSchema,
   type: z.enum(["switch", "sensor"]),
   subType: z.enum([
     "push",
@@ -85,7 +84,7 @@ const sliderSchema = baseElementSchema.extend({
   subType: z.literal("slider"),
   minValue: z.number(),
   maxValue: z.number(),
-  value: z.number(),
+  value: z.number().default(0),
 });
 
 const colorPickerSchema = baseElementSchema.extend({

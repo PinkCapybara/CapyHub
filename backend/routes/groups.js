@@ -40,7 +40,7 @@ router.get("/:id", authMiddleware, async (req, res) => {
 });
 
 // Create a new group
-router.post("", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         const { success } = groupSchema.safeParse(req.body);
         if (!success) {
