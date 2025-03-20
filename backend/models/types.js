@@ -89,7 +89,7 @@ const sliderSchema = baseElementSchema.extend({
 
 const colorPickerSchema = baseElementSchema.extend({
   subType: z.literal("color_picker"),
-  rgb: z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Invalid RGB format").default("#FFFFFF"), // "#RRGGBB"
+  value: z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Invalid RGB format").default("#FFFFFF"), // "#RRGGBB"
 });
 
 /* ####################
@@ -108,9 +108,9 @@ const widgetSchema = baseElementSchema.extend({
 
 const notificationSchema = baseElementSchema.extend({
   subType: z.literal("notification"),
+  element: objectIdSchema,
   message: z.string(),
   email: z.string().email(),
-  flag: z.boolean().default(false)
 });
 
 /* ####################

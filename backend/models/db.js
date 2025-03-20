@@ -116,7 +116,7 @@ const Slider = Element.discriminator("slider", SliderSchema);
 
 // Color Picker
 const ColorPickerSchema = new mongoose.Schema({
-  rgb: {
+  value: {
       type: String,  // Example: "#FF5733"
       required: true,
       default: "#FFFFFF"
@@ -148,10 +148,10 @@ const Widget = Element.discriminator("widget", WidgetSchema);
 
 // Notification
 const NotificationSchema = new mongoose.Schema({
+  element : { type: mongoose.Schema.Types.ObjectId, required: true},
   message: { type: String, required: true },
   email: { type: String, required: true },
-  condition: { type: String,  required: true},
-  flag: { type: Boolean,  default: false},
+  condition: { type: String,  required: true, trim: true},
 });
 const Notification = Element.discriminator("notification", NotificationSchema);
 
