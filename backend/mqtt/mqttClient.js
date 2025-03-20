@@ -27,10 +27,10 @@ client.on("message", (topic, payload) => {
   const [deviceId, topicName] = topic.split("/");
   const [type, id, data] = payload.toString().split("_");
 
-  mqttEmitter.emit(type,  id, data );
+  mqttEmitter.emit(type, id, data );
 });
 
-client.on('error', (err) => console.error('MQTT Error:', err));
+client.on('error', (err) => console.log('MQTT Error:', err));
 
 client.on("offline", () => {
   console.warn("MQTT Client Offline. Reconnecting...");
