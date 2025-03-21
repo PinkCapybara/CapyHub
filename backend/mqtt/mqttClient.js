@@ -26,6 +26,7 @@ client.on("connect", () => {
 client.on("message", (topic, payload) => {
   const [deviceId, topicName] = topic.split("/");
   const [type, id, data] = payload.toString().split("_");
+  // console.log(`message ${payload.toString()}`);
 
   mqttEmitter.emit(type, id, data );
 });

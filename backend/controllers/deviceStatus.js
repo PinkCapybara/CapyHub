@@ -15,8 +15,10 @@ const updateDeviceStatus = (deviceId, updates) => {
         device = new DeviceStatus(deviceId);
         Object.assign(device, updates);
         deviceStatusList.push(device);
+    }else{
+        Object.assign(device, updates);
     }
-
+    
     console.log(`Device ${deviceId} status updated:`, device);
 };
 

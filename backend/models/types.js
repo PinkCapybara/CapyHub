@@ -98,7 +98,7 @@ const colorPickerSchema = baseElementSchema.extend({
 const gaugeSchema = baseElementSchema.extend({
   subType: z.literal("gauge"),
   minValue: z.number(),
-  maxValue: z.number(),
+  maxValue: z.number(), 
 });
 
 const widgetSchema = baseElementSchema.extend({
@@ -110,7 +110,7 @@ const notificationSchema = baseElementSchema.extend({
   subType: z.literal("notification"),
   element: objectIdSchema,
   message: z.string(),
-  email: z.string().email(),
+  email: z.string().email(), 
 });
 
 /* ####################

@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const { userSchema, loginSchema } = require("../models/types");
 
 router.post("/signup", async (req, res) => {
-    // res.send("debug");
     const inpBody = req.body;
     const {success} = userSchema.safeParse(inpBody);
     if(!success){

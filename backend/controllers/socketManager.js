@@ -35,25 +35,6 @@ const initWebSocket = (server) => {
         ws.close(1008, 'Invalid token');
     }
   });
-
-  // Attach MQTT Listeners only once
-  if (!mqttEmitter.listenerCount('sens')) {
-    mqttEmitter.on('sens', ( elementId, value ) => {
-      broadcast({
-        type: 'SENSOR_UPDATE',
-        data: {elementId, value }
-      });
-    });
-  }
-
-  if (!mqttEmitter.listenerCount('status')) {
-    mqttEmitter.on('status', ( deviceId, status) => {
-      broadcast({
-        type: 'STATUS_UPDATE',
-        data: { deviceId, status }
-      });
-    });
-  }
 };
 
 // Broadcast to all authenticated clients
@@ -65,4 +46,4 @@ const broadcast = (message) => {
   });
 };
 
-module.exports = { initWebSocket };
+module.exports = { initWebSocket, broadcast };
