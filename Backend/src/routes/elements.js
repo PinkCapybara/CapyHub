@@ -74,8 +74,7 @@ router.post("/", authMiddleware, async (req, res) => {
 // Update an element and publish command to MQTT
 router.put("/:id", authMiddleware, async (req, res) => {
     try {
-        const { success } = elementSchema.safeParse(req.body);
-        if (!success) return res.status(400).json({ msg: "Invalid element data" });
+
 
         const element = await Element.findById(req.params.id);
         if (!element) return res.status(404).json({ msg: "Element not found" });
@@ -90,11 +89,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
 
         Object.assign(element, req.body);
         await element.save();
-
-        // Publish updated value to MQTT
-        if (element.mqttTopic) {
-            mqttClient.publish(element.mqttTopic, JSON.stringify({ elementId: element._id, value: req.body.value }));
-        }
 
         res.json({ msg: "Element updated", element });
     } catch (error) {

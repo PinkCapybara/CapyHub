@@ -5,8 +5,11 @@ const checkNotificationConditions = async (element) => {
   try{
   const rules = await Element.find({subType: "notification", element: element._id}).lean();
   
+  if(rules){
+  // console.log(rules);//debug
+  
   rules.forEach((rule) => {
-    const [operator, threshold] = rules.condition.split(" ");
+    const [operator, threshold] = rule.condition.split(" ");
     const thresholdValue = Number(threshold);
     let conditionMet = false;
 
@@ -17,7 +20,9 @@ const checkNotificationConditions = async (element) => {
       sendEmailAlert(rule.element, rule.condtion, rule.message, rule.email);
       console.log(`Alert sent for ${deviceId}: ${rule.condition}`);
     }
-  });
+    
+  })
+  };
 }catch (error) {
     console.error("Error in checkNotificationConditions:", error);
   }

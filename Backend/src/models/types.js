@@ -42,7 +42,7 @@ const groupSchema = z.object({
 /* ####################
    🔹 DEVICE SCHEMA
    #################### */
-const deviceSchema = z.object({
+const deviceSchema = z.object({ 
   name: z.string().max(50),
   group: objectIdSchema
 });
@@ -104,13 +104,36 @@ const gaugeSchema = baseElementSchema.extend({
 const widgetSchema = baseElementSchema.extend({
   subType: z.literal("widget"),
   unit: z.string(),
-});
+}); 
+
+
+const operatorNumberString = z.string()
+  .refine(
+    (value) => {
+      // Matches "> 25", "< 30.5", ">= 15.75", etc.
+      const pattern = /^(>=|<=|>|<)\s(\d+\.?\d*)$/; 
+      return pattern.test(value);
+    },
+    {
+      message: "Must be an operator (> < >= <=) followed by a space and a number (e.g., '> 25' or '<= 30.5')",
+    }
+  )
+  .refine(
+    (value) => {
+      const [_, operator, numStr] = value.match(/^(>=|<=|>|<)\s(\d+\.?\d*)$/) || [];
+      return !isNaN(parseFloat(numStr)); // Final numeric check
+    },
+    {
+      message: "The value after the operator must be a valid number (e.g., '15' or '12.5')",
+    }
+  );
 
 const notificationSchema = baseElementSchema.extend({
   subType: z.literal("notification"),
   element: objectIdSchema,
   message: z.string(),
   email: z.string().email(), 
+  condition: operatorNumberString
 });
 
 /* ####################
