@@ -1,6 +1,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { authState } from './store/authAtoms';
+import React from 'react';
+import Sidebar from './components/Sidebar';
 
 export const ProtectedLayout = () => {
   const auth = useRecoilValue(authState);

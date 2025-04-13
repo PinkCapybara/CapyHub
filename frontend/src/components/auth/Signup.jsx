@@ -57,11 +57,11 @@ const Signup = () => {
       setAuth(prev => ({
         ...prev,
         loading: false,
-        error: error.response.data.msg
+        error: error.response.data.msg || error.message
       }));
       setErrors(prev => ({
         ...prev,
-        apiError: error.response.data.msg
+        apiError:  error.response.data.msg || error.message
       }));
     } finally {
       setIsSubmitting(false);

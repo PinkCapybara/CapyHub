@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
+import React,{ useEffect } from 'react'
 import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
 import { authState, verifyToken, userProfile } from './store/authAtoms';
 import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
 
 function App() {
@@ -37,12 +37,13 @@ function App() {
   }, []);
 
   return (
+    <RecoilRoot>
     <BrowserRouter>
       <Routes>
         {/* Auth Routes (sign-in/sign-up) */}
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<Signin />} />
-          <Route path="/sign-up" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
 
         {/* Protected Routes */}
@@ -56,6 +57,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes> 
     </BrowserRouter>
+    </RecoilRoot>
   )
 }
 
