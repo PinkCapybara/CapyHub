@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useSetRecoilState } from 'recoil';
-import { authState, userProfile } from '../state/authAtoms'; //edit
+import { authState, userProfile } from '../../store/authAtoms'; 
+import { signUp } from '../../services/api/endpoints';
+import jwt from 'jsonwebtoken';
 
 const Signup = () => {
   const navigate = useNavigate();
   const setAuth = useSetRecoilState(authState);
   const setProfile = useSetRecoilState(userProfile);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    password: "",
+    firstName: "",
+    lastName: ""
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -20,8 +23,10 @@ const Signup = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.username.trim()) newErrors.username = 'Username is required';
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Invalid email address';
+    // if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Invalid email address';
     if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+    if(formData.firstName.length > 20) newErrors.firstName = 'First Name must be shorter than 20 characters';
+    if(formData.lastName.length > 20) newErrors.lasttName = 'Last Name must be shorter than 20 characters';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -34,9 +39,12 @@ const Signup = () => {
     setAuth(prev => ({ ...prev, loading: true }));
 
     try {
-      // Simulated API call
-      const response = await mockSignupAPI(formData);
-      
+      const response = await signUp(formData);
+      const authToken = response.data.token.split(" ")[1];
+      localStorage.setItem('token', authToken);
+      const {userId} = jwt.decode(authToken);
+      localStorage.setItem('userId', userId);
+
       setAuth({
         isAuthenticated: true,
         user: response.user,
@@ -45,14 +53,17 @@ const Signup = () => {
       });
       
       setProfile(response.user);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       setAuth(prev => ({
         ...prev,
         loading: false,
-        error: error.message
+        error: error.response.data.msg
       }));
-      setErrors({ apiError: error.message });
+      setErrors(prev => ({
+        ...prev,
+        apiError: error.response.data.msg
+      }));
     } finally {
       setIsSubmitting(false);
     }
@@ -90,23 +101,6 @@ return (
           </div>
   
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className={`w-full px-4 py-2 border ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all`}
-              disabled={isSubmitting}
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
-  
-          <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
@@ -136,6 +130,40 @@ return (
             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
           </div>
   
+          <div>
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+              First Name
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              value={formData.firstName}
+              onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+              className={`w-full px-4 py-2 border ${
+                errors.firstName ? 'border-red-500' : 'border-gray-300'
+              } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all`}
+              disabled={isSubmitting}
+            />
+            {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+              Last Name
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              value={formData.lastName}
+              onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+              className={`w-full px-4 py-2 border ${
+                errors.lastName ? 'border-red-500' : 'border-gray-300'
+              } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all`}
+              disabled={isSubmitting}
+            />
+            {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+          </div>
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -147,26 +175,13 @@ return (
   
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link to="/signin" className="text-blue-600 font-medium hover:underline">
+          <button onClick={()=> navigate('/sign-in')} className="text-blue-600 font-medium hover:underline">
             Sign in
-          </Link>
+          </button>
         </p>
       </div>
     </div>
   );
-};
-
-// Mock API function
-const mockSignupAPI = async (data) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  return {
-    user: {
-      id: '123',
-      username: data.username,
-      email: data.email
-    },
-    token: 'fake-jwt-token'
-  };
 };
 
 export default Signup;

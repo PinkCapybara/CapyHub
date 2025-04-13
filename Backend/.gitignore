@@ -5,5 +5,5 @@ node_modules/
 npm-debug.log
 
 # Ignore environment files
-backend/.env.local
+src/.env.local
 

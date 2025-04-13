@@ -6,6 +6,20 @@ require('dotenv').config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const { userSchema, loginSchema } = require("../models/types");
 
+router.get('/verify', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const user = await User.findById(decoded.userId);
+      
+      if (!user) throw new Error();
+      res.json({ valid: true });
+    } catch (error) {
+      res.status(401).json({ valid: false });
+    }
+});
+
 router.post("/signup", async (req, res) => {
     const inpBody = req.body;
     const {success} = userSchema.safeParse(inpBody);
