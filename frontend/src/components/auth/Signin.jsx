@@ -36,17 +36,17 @@ const Signin = () => {
       const response = await signIn(formData);
       const authToken = response.data.token.split(" ")[1];
       localStorage.setItem('token', authToken);
-      const {userId} = jwt.decode(authToken);
+      const {userId} = response.data.userId;
       localStorage.setItem('userId', userId);
 
       setAuth({
         isAuthenticated: true,
-        user: response.user,
+        user: response.data.userId,
         loading: false,
         error: null
       });
       
-      setProfile(response.user);
+      setProfile(response.data.user);
       navigate('/');
     } catch (error) {
       setAuth(prev => ({

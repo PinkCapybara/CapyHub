@@ -30,3 +30,17 @@ export const AuthLayout = () => {
     </div>
   );
 };
+
+export const MainLayout = () => {
+  const auth = useRecoilValue(authState);
+  
+  return (
+    <div className="flex h-screen">
+      <Sidebar username={auth.user?.username} />
+      <div className="flex-1 overflow-auto bg-gray-50">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
+

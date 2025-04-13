@@ -3,25 +3,32 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
-import { authState, verifyToken } from './store/authAtoms';
-import { AuthLayout, ProtectedLayout } from './layouts'
+import { authState, verifyToken, userProfile } from './store/authAtoms';
+import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import {Dashboard} from './components/Dashboard'
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
+  const setUserProfile = useSetRecoilState(userProfile);
 
   useEffect(() => {
     const checkAuth = async () => {
       if (auth.loading) {
-        const isValid = await verifyToken();
+        const {valid, user} = await verifyToken();
         
         setAuth(prev => ({
           ...prev,
-          isAuthenticated: isValid,
+          isAuthenticated: valid,
           loading: false
         }));
 
-        if (!isValid) {
+        if (!valid) {
           localStorage.clear();
+        }
+
+        if(valid){
+          setUserProfile(user);
         }
       }
     };
@@ -40,7 +47,9 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<ProtectedLayout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Dashboard />} />
+          </Route>
         </Route>
 
         {/* 404 Catch-all */}

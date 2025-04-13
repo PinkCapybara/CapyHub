@@ -1,7 +1,6 @@
 import { atom } from 'recoil';
-import { atom } from 'recoil';
+import axios from 'axios';
 
-// Helper function to load initial state
 const loadAuthState = () => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
@@ -33,14 +32,19 @@ export const authState = atom({
 
 export const verifyToken = async () => {
   const token = localStorage.getItem('token');
-  if (!token) return false;
+  if (!token) return {valid: false};
 
   try {
     const response = await axios.get('/api/auth/verify', {
       headers: { authorization: token }
     });
-    return response.data.valid;
+    return response.data;
   } catch (error) {
-    return false;
+    return {valid: false};
   }
 };
+
+export const userProfile = atom({
+  key: "userProfile",
+  default: null
+})

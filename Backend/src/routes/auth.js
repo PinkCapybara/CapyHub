@@ -12,9 +12,18 @@ router.get('/verify', async (req, res) => {
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
       const user = await User.findById(decoded.userId);
-      
+
       if (!user) throw new Error();
-      res.json({ valid: true });
+      const {username, firstName, lastName} = user;
+      
+      res.json({
+        valid: true,
+        "user": {
+            username,
+            firstName,
+            lastName
+        }
+      });
     } catch (error) {
       res.status(401).json({ valid: false });
     }
@@ -48,13 +57,21 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
     const userId = newUser._id;
 
+    const {username, firstName, lastName} = newUser;
+
     const token = jwt.sign({
         userId
     }, JWT_SECRET, { expiresIn: "7d" });
 
     res.status(200).json({
         "msg": "User created successfully",
-        "token": "Bearer " + token
+        "token": "Bearer " + token,
+        userId,
+        "user": {
+            username,
+            firstName,
+            lastName
+        }
     })
 })
 
@@ -88,8 +105,16 @@ router.post("/signin", async (req, res) => {
             userId
         }, JWT_SECRET, { expiresIn: "7d" });
 
+        const {username, firstName, lastName} = existingUser;
+
         res.status(200).json({
-            "token": "Bearer " + token
+            "token": "Bearer " + token,
+            userId,
+            "user": {
+                username,
+                firstName,
+                lastName
+            }
         })
     }else{
         res.status(401).json({

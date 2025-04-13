@@ -4,7 +4,6 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useSetRecoilState } from 'recoil';
 import { authState, userProfile } from '../../store/authAtoms'; 
 import { signUp } from '../../services/api/endpoints';
-import jwt from 'jsonwebtoken';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -42,17 +41,17 @@ const Signup = () => {
       const response = await signUp(formData);
       const authToken = response.data.token.split(" ")[1];
       localStorage.setItem('token', authToken);
-      const {userId} = jwt.decode(authToken);
+      const {userId} = response.data.userId;
       localStorage.setItem('userId', userId);
 
       setAuth({
         isAuthenticated: true,
-        user: response.user,
+        user: response.data.userId,
         loading: false,
         error: null
       });
       
-      setProfile(response.user);
+      setProfile(response.data.user);
       navigate('/');
     } catch (error) {
       setAuth(prev => ({
