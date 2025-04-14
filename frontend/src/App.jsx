@@ -7,6 +7,7 @@ import { authState, verifyToken, userProfile } from './store/authAtoms';
 import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
+import { Groups } from './components/Groups'
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -46,6 +47,7 @@ function App() {
         <Route element={<ProtectedLayout />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/groups" element={<Groups />} />
           </Route>
         </Route>
 

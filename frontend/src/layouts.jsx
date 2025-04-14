@@ -44,10 +44,10 @@ export const MainLayout = () => {
   }
   
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
     <Sidebar user={user} />
-      <main className="flex-1 p-4 md:ml-64 md:p-8">
-        <div className="mx-auto max-w-7xl">
+      <main className="flex-1 p-8">
+        <div className="mx-auto">
           <Outlet /> {/* Page content will render here */}
         </div>
       </main>

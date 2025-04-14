@@ -8,7 +8,7 @@ const Sidebar = ({user}) => {
   const [isSensorsOpen, setIsSensorsOpen] = useState(false);
 
   return (
-    <aside className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <aside className="w-64 h-screen pt-14 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     
     {/* Logo Section */}
     <div className="flex h-20 items-center border-b border-gray-200 px-6 dark:border-gray-700">
@@ -134,8 +134,8 @@ const Sidebar = ({user}) => {
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
             >
-                <path d="M17 17H7C4.51 17 2.5 14.99 2.5 12.5C2.5 10.01 4.51 8 7 8H17C19.49 8 21.5 10.01 21.5 12.5C21.5 14.99 19.49 17 17 17Z" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7.42737 15C8.80808 15 9.92737 13.8807 9.92737 12.5C9.92737 11.1193 8.80808 10 7.42737 10C6.04666 10 4.92737 11.1193 4.92737 12.5C4.92737 13.8807 6.04666 15 7.42737 15Z" stroke-miterlimit="10"/>
+                <path d="M17 17H7C4.51 17 2.5 14.99 2.5 12.5C2.5 10.01 4.51 8 7 8H17C19.49 8 21.5 10.01 21.5 12.5C21.5 14.99 19.49 17 17 17Z" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7.42737 15C8.80808 15 9.92737 13.8807 9.92737 12.5C9.92737 11.1193 8.80808 10 7.42737 10C6.04666 10 4.92737 11.1193 4.92737 12.5C4.92737 13.8807 6.04666 15 7.42737 15Z" strokeMiterlimit="10"/>
             </svg>
             <span className="flex-1 ml-3 text-left whitespace-nowrap">Switches</span>
             <svg 
@@ -205,7 +205,7 @@ const Sidebar = ({user}) => {
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
             >
-                <path d="M8.46447 15.5355C6.51185 13.5829 6.51185 10.4171 8.46447 8.46447M5.63592 18.364C2.1212 14.8493 2.1212 9.15077 5.63592 5.63605M15.5355 15.5355C17.4881 13.5829 17.4881 10.4171 15.5355 8.46447M18.364 18.364C21.8788 14.8493 21.8788 9.15077 18.364 5.63605M13 12.0001C13 12.5523 12.5523 13.0001 12 13.0001C11.4477 13.0001 11 12.5523 11 12.0001C11 11.4478 11.4477 11.0001 12 11.0001C12.5523 11.0001 13 11.4478 13 12.0001Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.46447 15.5355C6.51185 13.5829 6.51185 10.4171 8.46447 8.46447M5.63592 18.364C2.1212 14.8493 2.1212 9.15077 5.63592 5.63605M15.5355 15.5355C17.4881 13.5829 17.4881 10.4171 15.5355 8.46447M18.364 18.364C21.8788 14.8493 21.8788 9.15077 18.364 5.63605M13 12.0001C13 12.5523 12.5523 13.0001 12 13.0001C11.4477 13.0001 11 12.5523 11 12.0001C11 11.4478 11.4477 11.0001 12 11.0001C12.5523 11.0001 13 11.4478 13 12.0001Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="flex-1 ml-3 text-left whitespace-nowrap">Sensors</span>
             <svg 
