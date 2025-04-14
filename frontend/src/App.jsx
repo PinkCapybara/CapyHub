@@ -7,7 +7,6 @@ import { authState, verifyToken, userProfile } from './store/authAtoms';
 import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
-import { Flowbite } from 'flowbite-react';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -35,7 +34,6 @@ function App() {
   }, []);
 
   return (
-    <Flowbite>
     <BrowserRouter>
       <Routes>
         {/* Auth Routes (sign-in/sign-up) */}
@@ -55,7 +53,6 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes> 
     </BrowserRouter>
-    </Flowbite>
   )
 }
 
