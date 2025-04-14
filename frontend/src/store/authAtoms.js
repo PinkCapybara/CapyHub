@@ -7,7 +7,7 @@ const loadAuthState = () => {
     const userId = localStorage.getItem('userId');
     
     return {
-      isAuthenticated: false,
+      isAuthenticated: false, 
       userId: userId || null,
       loading: !!token,
       error: null

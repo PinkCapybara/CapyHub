@@ -37,10 +37,15 @@ export const AuthLayout = () => {
 
 export const MainLayout = () => {
   const user = useRecoilValue(userProfile);
+
+  // If the user data hasn't loaded yet, display a loading indicator.
+  if (!user) {
+    return <div>Loading...</div>;
+  }
   
   return (
     <div className="flex h-screen">
-      <Sidebar username={user.username} />
+      <Sidebar user={user} />
       <div className="flex-1 overflow-auto bg-gray-50">
         <Outlet />
       </div>
