@@ -1,11 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { authState } from './store/authAtoms';
+import { authState, userProfile } from './store/authAtoms';
 import React from 'react';
 import Sidebar from './components/Sidebar';
 
 export const ProtectedLayout = () => {
   const auth = useRecoilValue(authState);
+
+  if(auth.loading) return(<div/>);
 
   if (!auth.isAuthenticated) {
     return <Navigate to="/sign-in" replace />;
@@ -34,11 +36,11 @@ export const AuthLayout = () => {
 };
 
 export const MainLayout = () => {
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(userProfile);
   
   return (
     <div className="flex h-screen">
-      <Sidebar username={auth.user?.username} />
+      <Sidebar username={user.username} />
       <div className="flex-1 overflow-auto bg-gray-50">
         <Outlet />
       </div>

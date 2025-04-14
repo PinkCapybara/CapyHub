@@ -35,13 +35,13 @@ const Signin = () => {
     try {
       const response = await signIn(formData);
       const authToken = response.data.token.split(" ")[1];
-      localStorage.setItem('token', authToken);
-      const {userId} = response.data.userId;
+      localStorage.setItem('token', "Bearer "+authToken);
+      const userId = response.data.userId;
       localStorage.setItem('userId', userId);
 
       setAuth({
         isAuthenticated: true,
-        user: response.data.userId,
+        userId: response.data.userId,
         loading: false,
         error: null
       });
@@ -52,11 +52,11 @@ const Signin = () => {
       setAuth(prev => ({
         ...prev,
         loading: false,
-        error: error.response.data.msg || error.message
+        error: error?.response?.data?.msg || error.message
       }));
       setErrors(prev => ({
         ...prev,
-        apiError: error.response.data.msg || error.message
+        apiError: error?.response?.data?.msg || error.message
       }));
     } finally {
       setIsSubmitting(false);

@@ -5,8 +5,9 @@ import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
 import { authState, verifyToken, userProfile } from './store/authAtoms';
 import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
+import { Flowbite } from 'flowbite-react';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -15,20 +16,17 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       if (auth.loading) {
-        const {valid, user} = await verifyToken();
-        
+        const response = await verifyToken();
+
         setAuth(prev => ({
           ...prev,
-          isAuthenticated: valid,
+          isAuthenticated: response.valid,
+          userId: response.userId,
           loading: false
         }));
 
-        if (!valid) {
-          localStorage.clear();
-        }
-
-        if(valid){
-          setUserProfile(user);
+        if(response.valid === true){
+          setUserProfile(response.user);
         }
       }
     };
@@ -37,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <RecoilRoot>
+    <Flowbite>
     <BrowserRouter>
       <Routes>
         {/* Auth Routes (sign-in/sign-up) */}
@@ -57,7 +55,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes> 
     </BrowserRouter>
-    </RecoilRoot>
+    </Flowbite>
   )
 }
 

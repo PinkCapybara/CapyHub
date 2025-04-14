@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import axios from 'axios';
+import {axiosInstance} from '../services/api/axiosInstance';
 
 const loadAuthState = () => {
     const token = localStorage.getItem('token');
@@ -35,9 +36,8 @@ export const verifyToken = async () => {
   if (!token) return {valid: false};
 
   try {
-    const response = await axios.get('/api/auth/verify', {
-      headers: { authorization: token }
-    });
+    const response = await axiosInstance.get('/auth/verify');
+    console.log("response: ", response.data);
     return response.data;
   } catch (error) {
     return {valid: false};

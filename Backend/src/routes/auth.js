@@ -17,7 +17,8 @@ router.get('/verify', async (req, res) => {
       const {username, firstName, lastName} = user;
       
       res.json({
-        valid: true,
+        "valid": true,
+        "userId": decoded.userId,
         "user": {
             username,
             firstName,
