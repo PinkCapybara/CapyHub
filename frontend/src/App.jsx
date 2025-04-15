@@ -9,6 +9,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
 import { Groups } from './components/Groups'
 import { Devices } from './components/Devices'
+import { Toggle } from './components/switches/ToggleSwitch'
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/groups" element={<Groups />} />
             <Route path="/devices" element={<Devices />} />
+            <Route path="/switches/toggle-switch" element={<Toggle />} />
           </Route>
         </Route>
 
