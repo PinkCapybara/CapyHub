@@ -4,18 +4,16 @@ import { groupsAtom, groupsRefreshAtom } from '../store/gdAtoms';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { createGroup, editGroup, deleteGroup } from '../services/api/endpoints';
 import { useApiMutation } from '../hooks/mutationHook';
+import '../App.css'
 
 export const Groups = () => {
-  // groupsAtom now automatically re-fetches when groupsRefreshAtom updates.
   const groups = useRecoilValue(groupsAtom);
-  // console.log(groups);
   const setRefresh = useSetRecoilState(groupsRefreshAtom);
   
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [formState, setFormState] = useState({ _id: '', name: '' });
 
-  // Set up mutation hooks.
   const { mutate: createMutate, loading: createLoading } = useApiMutation(createGroup);
   const { mutate: editMutate, loading: editLoading } = useApiMutation(editGroup);
   const { mutate: deleteMutate, loading: deleteLoading } = useApiMutation(deleteGroup);
@@ -76,7 +74,7 @@ export const Groups = () => {
         <h2 className="text-2xl font-bold mb-4 text-gray-100 sticky top-0 bg-gray-900 z-10 py-4 dark:text-white">
           Groups List
         </h2>
-        <div className="space-y-3 scroll-smooth overflow-y-auto mb-10 pb-4">
+        <div className="space-y-3 custom-scrollbar scroll-smooth overflow-y-auto mb-10 pb-4">
           {groups.map(group => (
             <div 
               key={group._id}

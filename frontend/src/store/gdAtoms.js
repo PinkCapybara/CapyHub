@@ -30,7 +30,6 @@ export const devicesAtom = atom({
     })
 })
 
-
 export const devicesRefreshAtom = atom({
     key: 'devicesRefreshAtom',
     default: 0,
