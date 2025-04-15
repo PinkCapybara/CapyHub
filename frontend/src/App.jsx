@@ -8,6 +8,7 @@ import { AuthLayout, ProtectedLayout, MainLayout } from './layouts'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import {Dashboard} from './components/Dashboard'
 import { Groups } from './components/Groups'
+import { Devices } from './components/Devices'
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -48,6 +49,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/groups" element={<Groups />} />
+            <Route path="/devices" element={<Devices />} />
           </Route>
         </Route>
 
