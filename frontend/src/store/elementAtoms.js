@@ -3,11 +3,14 @@ import {getElements} from "../services/api/endpoints";
 
 export const elementsAtom = atom({
   key: 'elementsAtom',
-  get: async ({get}) => {
-    get(elementRefreshAtom);
-    const res = await getElements();
-    return res.data.elements
-  }
+  default: selector({
+          key: "elementSelector",
+          get: async ({get}) => {
+            get(elementRefreshAtom);
+            const res = await getElements();
+            return res.data.elements
+          }
+      })
 });
 
 export const elementRefreshAtom = atom({

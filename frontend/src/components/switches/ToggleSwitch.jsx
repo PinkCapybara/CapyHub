@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { devicesAtom, groupsAtom } from '../../store/gdAtoms';
 import { elementRefreshAtom } from '../../store/elementAtoms';
@@ -61,7 +61,11 @@ export const Toggle = () => {
   };
 
   const handleEdit = (toggleSwitch) => {
-    setFormState(toggleSwitch);
+    const modifiedSwitch = { 
+        ...toggleSwitch,
+        subscribeTopic: toggleSwitch.subscribeTopic.split("/")[1] 
+      };
+    setFormState(modifiedSwitch);
     setIsEditing(true);
     setIsDeleting(false);
   };
@@ -93,7 +97,7 @@ export const Toggle = () => {
     <div className="flex flex-row h-screen gap-8 m-2 p-6 bg-gray-900">
       {/* Toggle Switches List */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <h2 className="text-2xl font-bold mb-4 text-gray-100 sticky top-0 bg-gray-900 z-10 py-4">
+        <h2 className="text-2xl font-bold mb-4 text-gray-100 dark:text-white sticky top-0 bg-gray-900 z-10 py-4">
           Toggle Switches
         </h2>
         <div className="space-y-3 scroll-smooth overflow-y-auto mb-10 pb-4 custom-scrollbar">
@@ -115,8 +119,13 @@ export const Toggle = () => {
                     Device: {device?.name || 'Unknown'} | Group: {group?.name || 'Unknown'}
                   </div>
                   <div className="text-sm text-gray-400">
-                    Subscribe: {toggleSwitch.subscribeTopic} | Payloads: {toggleSwitch.payloadOn}/{toggleSwitch.payloadOff}
-                  </div>
+                    <div>Subscribe: {toggleSwitch.subscribeTopic}</div>
+                    <div>Publish: {toggleSwitch.publishTopic || 'N/A'}</div>
+                </div>
+                <div className="text-sm text-gray-400">
+                    <div>On Payload: {toggleSwitch.payloadOn}</div>
+                    <div>Off Payload: {toggleSwitch.payloadOff}</div>
+                </div>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -141,7 +150,7 @@ export const Toggle = () => {
       {/* Form / Delete Confirmation */}
       <div className="w-96 sticky top-6 h-fit">
         <div className="bg-gray-800 p-6 border border-gray-700 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-gray-100">
+          <h2 className="text-xl font-bold mb-4 text-gray-100 dark:text-white">
             {isEditing ? 'Edit Toggle Switch' : isDeleting ? 'Delete Toggle Switch' : 'Add New Toggle Switch'}
           </h2>
 
@@ -173,7 +182,7 @@ export const Toggle = () => {
                   <input
                     type="text"
                     required
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     value={formState.name}
                     onChange={e => setFormState({...formState, name: e.target.value})}
                   />
@@ -183,7 +192,7 @@ export const Toggle = () => {
                   <label className="block text-sm font-medium mb-1 text-gray-400">Device</label>
                   <select
                     required
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     value={formState.device}
                     onChange={e => setFormState({...formState, device: e.target.value})}
                   >
@@ -200,8 +209,8 @@ export const Toggle = () => {
                   <label className="block text-sm font-medium mb-1 text-gray-400">Subscribe Topic</label>
                   <input
                     type="text"
-                    required
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    required 
+                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     value={formState.subscribeTopic}
                     onChange={e => setFormState({...formState, subscribeTopic: e.target.value})}
                   />
@@ -213,7 +222,7 @@ export const Toggle = () => {
                     <input
                       type="text"
                       required
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       value={formState.payloadOn}
                       onChange={e => setFormState({...formState, payloadOn: e.target.value})}
                     />
@@ -223,7 +232,7 @@ export const Toggle = () => {
                     <input
                       type="text"
                       required
-                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       value={formState.payloadOff}
                       onChange={e => setFormState({...formState, payloadOff: e.target.value})}
                     />

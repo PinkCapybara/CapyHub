@@ -14,13 +14,13 @@ export const editDevice = (props) => axiosInstance.put(`/devices/${props._id}`, 
 export const deleteDevice = (props) => axiosInstance.delete(`/devices/${props._id}`);
 
 export const getElements = () => axiosInstance.get('/elements');
-export const deleteElements = (props) => axiosInstance.delete(`/devices/${props._id}`);
+export const deleteElements = (props) => axiosInstance.delete(`/elements/${props._id}`);
 
 // ───── SWITCHES ──────────────────────────────────────────────────────────────────
 
 // Push Button (Switch)
 export const createPushButton = (props) =>
-    axiosInstance.post('/elements/push', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
@@ -41,7 +41,7 @@ export const createPushButton = (props) =>
   
   // Toggle Button (Switch)
   export const createToggle = (props) =>
-    axiosInstance.post('/elements/toggle', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
@@ -63,7 +63,7 @@ export const createPushButton = (props) =>
   
   // Slider (Switch)
   export const createSlider = (props) =>
-    axiosInstance.post('/elements/slider', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
@@ -85,7 +85,7 @@ export const createPushButton = (props) =>
   
   // Color Picker (Switch)
   export const createColorPicker = (props) =>
-    axiosInstance.post('/elements/color_picker', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
@@ -105,7 +105,7 @@ export const createPushButton = (props) =>
   
   // Gauge (Sensor)
   export const createGauge = (props) =>
-    axiosInstance.post('/elements/gauge', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
@@ -127,13 +127,14 @@ export const createPushButton = (props) =>
   
   // Widget (Sensor)
   export const createWidget = (props) =>
-    axiosInstance.post('/elements/widget', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,
       type: "sensor",
       subType: "widget",
       unit: props.unit,
+      icon: props.icon
     });
   export const editWidget = (props) =>
     axiosInstance.put(`/elements/${props._id}`, {
@@ -143,11 +144,12 @@ export const createPushButton = (props) =>
       type: "sensor",
       subType: "widget",
       unit: props.unit,
+      icon: props.icon
     });
   
   // Notification (Sensor)
   export const createNotification = (props) =>
-    axiosInstance.post('/elements/notification', {
+    axiosInstance.post('/elements', {
       name: props.name,
       device: props.device,
       subscribeTopic: props.subscribeTopic,

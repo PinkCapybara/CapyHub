@@ -104,6 +104,7 @@ const gaugeSchema = baseElementSchema.extend({
 const widgetSchema = baseElementSchema.extend({
   subType: z.literal("widget"),
   unit: z.string(),
+  icon: z.string()
 }); 
 
 

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { devicesAtom, groupsAtom } from '../../store/gdAtoms';
 import { elementRefreshAtom } from '../../store/elementAtoms';
-import { pushSwitchesAtom } from '../../store/switchAtoms';
+import { sliderSwitchesAtom } from '../../store/switchAtoms';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { createPushButton, editPushButton, deleteElements } from '../../services/api/endpoints';
+import { createSlider, editSlider, deleteElements } from '../../services/api/endpoints';
 import { useApiMutation } from '../../hooks/mutationHook';
 
-export const Push = () => {
-  const pushSwitches = useRecoilValue(pushSwitchesAtom);
+export const Slider = () => {
+  const sliderSwitches = useRecoilValue(sliderSwitchesAtom);
   const devices = useRecoilValue(devicesAtom);
   const groups = useRecoilValue(groupsAtom);
   const setRefresh = useSetRecoilState(elementRefreshAtom);
@@ -20,11 +20,12 @@ export const Push = () => {
     name: '', 
     device: '',
     subscribeTopic: '',
-    payload: ''
+    minValue: '',
+    maxValue: ''
   });
 
-  const { mutate: createMutate, loading: createLoading } = useApiMutation(createPushButton);
-  const { mutate: editMutate, loading: editLoading } = useApiMutation(editPushButton);
+  const { mutate: createMutate, loading: createLoading } = useApiMutation(createSlider);
+  const { mutate: editMutate, loading: editLoading } = useApiMutation(editSlider);
   const { mutate: deleteMutate, loading: deleteLoading } = useApiMutation(deleteElements);
 
   const handleSubmit = async (e) => {
@@ -32,7 +33,8 @@ export const Push = () => {
     try {
       const payload = {
         ...formState,
-        payload: formState.payload
+        minValue: Number(formState.minValue),
+        maxValue: Number(formState.maxValue)
       };
 
       if (isEditing) {
@@ -57,18 +59,18 @@ export const Push = () => {
     resetForm();
   };
 
-  const handleEdit = (pushSwitch) => {
+  const handleEdit = (sliderSwitch) => {
     const modifiedSwitch = { 
-      ...pushSwitch,
-      subscribeTopic: pushSwitch.subscribeTopic.split("/")[1] 
+      ...sliderSwitch,
+      subscribeTopic: sliderSwitch.subscribeTopic.split("/")[1] 
     };
     setFormState(modifiedSwitch);
     setIsEditing(true);
     setIsDeleting(false);
   };
 
-  const handleDeleteStart = (pushSwitch) => {
-    setFormState(pushSwitch);
+  const handleDeleteStart = (sliderSwitch) => {
+    setFormState(sliderSwitch);
     setIsDeleting(true);
     setIsEditing(false);
   };
@@ -83,7 +85,8 @@ export const Push = () => {
       name: '', 
       device: '',
       subscribeTopic: '',
-      payload: ''
+      minValue: '',
+      maxValue: ''
     });
     setIsEditing(false);
     setIsDeleting(false);
@@ -91,48 +94,49 @@ export const Push = () => {
 
   return (
     <div className="flex flex-row h-screen gap-8 m-2 p-6 bg-gray-900">
-      {/* Push Buttons List */}
+      {/* Slider List */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <h2 className="text-2xl font-bold mb-4 text-gray-100 dark:text-white sticky top-0 bg-gray-900 z-10 py-4">
-          Push Buttons
+          Sliders
         </h2>
         <div className="space-y-3 scroll-smooth overflow-y-auto mb-10 pb-4 custom-scrollbar">
-          {pushSwitches.map(pushSwitch => {
-            const device = devices.find(d => d._id === pushSwitch.device);
+          {sliderSwitches.map(sliderSwitch => {
+            const device = devices.find(d => d._id === sliderSwitch.device);
             const group = groups.find(g => g._id === device?.group);
             
             return (
               <div 
-                key={pushSwitch._id}
+                key={sliderSwitch._id}
                 className="p-4 border border-gray-700 rounded-lg bg-gray-800 hover:bg-gray-700 flex justify-between items-center transition-colors"
               >
                 <div className="flex flex-col flex-1">
                   <div className="flex justify-between">
-                    <span className="font-medium text-gray-200">{pushSwitch.name}</span>
-                    <span className="text-sm text-gray-400 font-mono">ID: {pushSwitch._id}</span>
+                    <span className="font-medium text-gray-200">{sliderSwitch.name}</span>
+                    <span className="text-sm text-gray-400 font-mono">ID: {sliderSwitch._id}</span>
                   </div>
                   <div className="text-sm text-gray-400 mt-1">
                     Device: {device?.name || 'Unknown'} | Group: {group?.name || 'Unknown'}
                   </div>
                   <div className="grid grid-cols-2 gap-2 mt-1">
                     <div className="text-sm text-gray-400">
-                      <div>Subscribe: {pushSwitch.subscribeTopic}</div>
-                      <div>Publish: {pushSwitch.publishTopic || 'N/A'}</div>
+                      <div>Subscribe: {sliderSwitch.subscribeTopic}</div>
+                      <div>Publish: {sliderSwitch.publishTopic || 'N/A'}</div>
                     </div>
                     <div className="text-sm text-gray-400">
-                      <div>Payload: {pushSwitch.payload}</div>
+                      <div>Min: {sliderSwitch.minValue}</div>
+                      <div>Max: {sliderSwitch.maxValue}</div>
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleEdit(pushSwitch)}
+                    onClick={() => handleEdit(sliderSwitch)}
                     className="text-indigo-400 hover:text-indigo-300 p-1 rounded-md hover:bg-gray-600"
                   >
                     <PencilIcon className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => handleDeleteStart(pushSwitch)}
+                    onClick={() => handleDeleteStart(sliderSwitch)}
                     className="text-red-400 hover:text-red-300 p-1 rounded-md hover:bg-gray-600"
                   >
                     <TrashIcon className="w-5 h-5" />
@@ -148,7 +152,7 @@ export const Push = () => {
       <div className="w-96 sticky top-6 h-fit">
         <div className="bg-gray-800 p-6 border border-gray-700 rounded-lg shadow-lg">
           <h2 className="text-xl font-bold mb-4 text-gray-100 dark:text-white">
-            {isEditing ? 'Edit Push Button' : isDeleting ? 'Delete Push Button' : 'Add New Push Button'}
+            {isEditing ? 'Edit Slider' : isDeleting ? 'Delete Slider' : 'Add New Slider'}
           </h2>
 
           {isDeleting ? (
@@ -213,15 +217,27 @@ export const Push = () => {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-400">Payload</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    value={formState.payload}
-                    onChange={e => setFormState({...formState, payload: e.target.value})}
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-400">Min Value</label>
+                    <input
+                      type="number"
+                      required
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      value={formState.minValue}
+                      onChange={e => setFormState({...formState, minValue: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-400">Max Value</label>
+                    <input
+                      type="number"
+                      required
+                      className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      value={formState.maxValue}
+                      onChange={e => setFormState({...formState, maxValue: e.target.value})}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-3 pt-4">
@@ -246,7 +262,7 @@ export const Push = () => {
                       type="submit"
                       className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 w-full transition-colors"
                     >
-                      {createLoading ? 'Adding...' : 'Add Push Button'}
+                      {createLoading ? 'Adding...' : 'Add Slider'}
                     </button>
                   )}
                 </div>

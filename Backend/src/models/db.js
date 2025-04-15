@@ -142,7 +142,8 @@ const Gauge = Element.discriminator("gauge", GaugeSchema);
 // Widgets
 const WidgetSchema = new mongoose.Schema({
   unit: { type: String, required: true },
-  value: { type: Number, default: 0 }
+  value: { type: Number, default: 0 },
+  icon: { type: String, required: true }
 });
 const Widget = Element.discriminator("widget", WidgetSchema);
 

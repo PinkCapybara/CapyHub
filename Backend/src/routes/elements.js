@@ -87,6 +87,10 @@ router.put("/:id", authMiddleware, async (req, res) => {
             return res.status(403).json({ msg: "Unauthorized" });
         }
 
+        if(req.body.subscribeTopic){
+            req.body.subscribeTopic = req.body.device + "/" + req.body.subscribeTopic
+        }
+
         Object.assign(element, req.body);
         await element.save();
 

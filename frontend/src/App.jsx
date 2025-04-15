@@ -10,6 +10,12 @@ import {Dashboard} from './components/Dashboard'
 import { Groups } from './components/Groups'
 import { Devices } from './components/Devices'
 import { Toggle } from './components/switches/ToggleSwitch'
+import { Push } from './components/switches/PushButton'
+import { Slider } from './components/switches/Slider'
+import { ColorPicker } from './components/switches/ColorPicker'
+import { Gauges } from './components/sensors/Gauges'
+import { Notifications } from './components/sensors/Notifications'
+import { Widgets } from './components/sensors/Widgets'
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -51,7 +57,13 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/groups" element={<Groups />} />
             <Route path="/devices" element={<Devices />} />
+            <Route path="/switches/push-button" element={<Push />} />
             <Route path="/switches/toggle-switch" element={<Toggle />} />
+            <Route path="/switches/slider" element={<Slider />} />
+            <Route path="/switches/color-picker" element={<ColorPicker />} />
+            <Route path="/sensors/notifications" element={<Notifications />} />
+            <Route path="/sensors/widgets" element={<Widgets />} />
+            <Route path="/sensors/gauges" element={<Gauges />} />
           </Route>
         </Route>
 
