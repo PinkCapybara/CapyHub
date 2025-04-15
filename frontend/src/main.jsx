@@ -8,6 +8,8 @@ import 'flowbite';
 
 createRoot(document.getElementById('root')).render(
     <RecoilRoot>
-    <App />
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <App />
+    </React.Suspense>
     </RecoilRoot>
 )

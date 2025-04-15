@@ -275,7 +275,7 @@ const Sidebar = ({user}) => {
             </button>
         </li>
         </ul>
-        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-gray-200 dark:border-gray-600">
+        <div className="absolute bottom-0 left-0 w-64 p-4 border-t border-gray-200 dark:border-gray-600">
             <div className="flex items-center">
             <div className="flex-shrink-0">
                 <span className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
