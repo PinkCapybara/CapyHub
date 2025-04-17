@@ -16,10 +16,21 @@ import { ColorPicker } from './components/switches/ColorPicker'
 import { Gauges } from './components/sensors/Gauges'
 import { Notifications } from './components/sensors/Notifications'
 import { Widgets } from './components/sensors/Widgets'
+import { connectWebSocket, disconnectWebSocket } from './services/api/webSocketClient'
+import {
+  useHandleSensorUpdate,
+  useHandleResponseUpdate,
+  useHandleStatusUpdate,
+  useHandleSigstrUpdate
+} from './services/api/wsHandlers';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState);
   const setUserProfile = useSetRecoilState(userProfile);
+  const handleSensor   = useHandleSensorUpdate();
+  const handleResponse = useHandleResponseUpdate();
+  const handleStatus   = useHandleStatusUpdate();
+  const handleSigstr   = useHandleSigstrUpdate();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -41,6 +52,36 @@ function App() {
 
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if(auth.isAuthenticated){
+    connectWebSocket(token,(message) => {
+      const { type, data } = message;
+      switch (type) {
+        case 'SENSOR_UPDATE':
+          handleSensor(data);
+          break;
+        case 'STATUS_UPDATE':
+          handleStatus(data);
+          break;
+        case 'SIGSTR_UPDATE':
+          handleSigstr(data);
+          break;
+        case 'RESPONSE':
+          handleResponse(data);
+          break;
+        default:
+          console.log('[WS] Unknown message type:', type);
+      }
+    })
+
+    return () => {
+      disconnectWebSocket();
+    };
+  }
+  }, [auth.isAuthenticated]);
 
   return (
     <BrowserRouter>
