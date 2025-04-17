@@ -44,7 +44,7 @@ export const MainLayout = () => {
   }
   
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen  overflow-hidden bg-gray-50 dark:bg-gray-900">
     <Sidebar user={user} />
       <main className="flex-1 p-8">
         <div className="mx-auto">

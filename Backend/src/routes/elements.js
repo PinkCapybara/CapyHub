@@ -147,7 +147,9 @@ router.post("/:id/publish", authMiddleware, async (req, res) => {
 
         // Publish to MQTT topic
         const topic = element.subscribeTopic;
-        mqttClient.publish(topic, payload, { qos: 1 });
+
+        const sanitizedPayload = typeof payload === 'string' ? payload : String(payload);
+        mqttClient.publish(topic, sanitizedPayload, { qos: 1 });
 
         res.json({ message: "Command published successfully", topic, payload });
     } catch (error) {

@@ -34,3 +34,19 @@ export const devicesRefreshAtom = atom({
     key: 'devicesRefreshAtom',
     default: 0,
 });
+
+export const deviceStatusAtom = atom({
+    key: 'deviceStatus',
+    default: selector({
+      key: 'deviceStatus/default',
+      get: ({get}) => {
+        const devices = get(devicesAtom);
+        return devices.map(device => ({
+          deviceId: device._id,
+          name: device.name,
+          isOnline: false,
+          strength: 0
+        }));
+      }
+    })
+  });

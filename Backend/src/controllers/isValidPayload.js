@@ -15,7 +15,7 @@ const isValidPayload = (element, payload) => {
             if (isNaN(payload)) return { valid: false, error: "Slider payload must be a number" };
             if(payload < element.minValue || payload > element.maxValue)  return { valid: false, error: " payload must be in slider range" };
             break;
-        case "colorPicker":
+        case "color_picker":
             const colorRegex = /^#[0-9A-Fa-f]{6}$/; // Hex color validation
             if (!colorRegex.test(payload)) return { valid: false, error: "Invalid color format" };
             break;

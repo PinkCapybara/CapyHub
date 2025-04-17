@@ -13,6 +13,14 @@ export const createDevice = (props) => axiosInstance.post('/devices', {name: pro
 export const editDevice = (props) => axiosInstance.put(`/devices/${props._id}`, {name: props.name, group: props.group});   
 export const deleteDevice = (props) => axiosInstance.delete(`/devices/${props._id}`);
 
+//Publishing
+
+export const pushAction = (props) => axiosInstance.post(`/elements/${props._id}/publish`, {payload: props.payload});
+export const toggleActionOn = (props) => axiosInstance.post(`/elements/${props._id}/publish`, {payload: props.payloadOn});
+export const toggleActionOff = (props) => axiosInstance.post(`/elements/${props._id}/publish`, {payload: props.payloadOff});
+export const slideAction = (props, value) => axiosInstance.post(`/elements/${props._id}/publish`, {payload: value});
+export const colorAction = (props, value) => axiosInstance.post(`/elements/${props._id}/publish`, {payload: value});
+
 export const getElements = () => axiosInstance.get('/elements');
 export const deleteElements = (props) => axiosInstance.delete(`/elements/${props._id}`);
 
