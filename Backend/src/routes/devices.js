@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { Device, Group, User } = require("../models/db");
 const authMiddleware = require("../middleware/authMiddleware");
 const { deviceSchema } = require("../models/types");
+const { deviceStatusList, DeviceStatus } = require("../controllers/deviceStatus") ;
 const router = Router();
 
 // Get all devices for a user
@@ -12,8 +13,21 @@ router.get("/", authMiddleware, async (req, res) => {
             return res.status(404).json({ msg: "User not found" });
         }
 
-        const devices = await Device.find({ group: { $in: user.groups } });
+        const devices = await Device.find({ group: { $in: user.groups } }).lean();
         
+        for(const device of devices) {
+            const status = deviceStatusList.find(d => d.deviceId === device._id.toString());
+            if (status) {
+                device.isOnline = status.isOnline;
+                device.strength = status.strength;
+            } else {
+                device.isOnline = false;
+                device.strength = 0;
+                newDevice = new DeviceStatus(device._id.toString());                
+                deviceStatusList.push(newDevice);
+            }
+        }
+
         res.json({ devices });
     } catch (error) {
         res.status(500).json({ msg: "Error fetching devices" });

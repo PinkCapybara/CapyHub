@@ -7,3 +7,5 @@ npm-debug.log
 # Ignore environment files
 src/.env.local
 
+Dockerfile
+

@@ -13,7 +13,7 @@ router.get('/verify', async (req, res) => {
       const decoded = jwt.verify(token, JWT_SECRET);
       const user = await User.findById(decoded.userId);
 
-      if (!user) throw new Error();
+      if (!user) throw new Error("User not found");
       const {username, firstName, lastName} = user;
       
       res.json({

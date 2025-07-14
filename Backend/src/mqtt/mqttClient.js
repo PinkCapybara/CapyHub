@@ -2,6 +2,7 @@ const mqtt = require('mqtt');
 const EventEmitter = require('events');
 require('dotenv').config();
 
+
 const client = mqtt.connect(process.env.MQTT_BROKER_URL, {
     username: process.env.MQTT_USERNAME,
     password: process.env.MQTT_PASSWORD,
@@ -26,7 +27,7 @@ client.on("connect", () => {
 client.on("message", (topic, payload) => {
   const [deviceId, topicName] = topic.split("/");
   const [type, id, data] = payload.toString().split("_");
-  // console.log(`message ${payload.toString()}`); // for debugging
+  // console.log(`message ${payload.toString()}`); 
 
   mqttEmitter.emit(type, id, data );
 });

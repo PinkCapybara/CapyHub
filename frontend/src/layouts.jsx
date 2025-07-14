@@ -1,13 +1,23 @@
-import { Outlet, Navigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { authState, userProfile } from './store/authAtoms';
-import React from 'react';
-import Sidebar from './components/Sidebar';
+import { Outlet, Navigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authState, userProfile } from "./store/authAtoms";
+import React, { useEffect } from "react";
+import Sidebar from "./components/Sidebar";
+import {
+  useHandleSensorUpdate,
+  useHandleResponseUpdate,
+  useHandleStatusUpdate,
+  useHandleSigstrUpdate,
+} from "./services/api/wsHandlers";
+import {
+  connectWebSocket,
+  disconnectWebSocket,
+} from "./services/api/webSocketClient";
 
 export const ProtectedLayout = () => {
   const auth = useRecoilValue(authState);
 
-  if(auth.loading) return(<div/>);
+  if (auth.loading) return <div>Loading...</div>;
 
   if (!auth.isAuthenticated) {
     return <Navigate to="/sign-in" replace />;
@@ -37,15 +47,45 @@ export const AuthLayout = () => {
 
 export const MainLayout = () => {
   const user = useRecoilValue(userProfile);
+  const auth = useRecoilValue(authState);
+  const handleSensor = useHandleSensorUpdate();
+  const handleResponse = useHandleResponseUpdate();
+  const handleStatus = useHandleStatusUpdate();
+  const handleSigstr = useHandleSigstrUpdate();
 
-  // If the user data hasn't loaded yet, display a loading indicator.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    connectWebSocket(token, (message) => {
+          const { type, data } = message;
+          switch (type) {
+            case "SENSOR_UPDATE":
+              handleSensor(data);
+              break;
+            case "STATUS_UPDATE":
+              handleStatus(data);
+              break;
+            case "SIGSTR_UPDATE":
+              handleSigstr(data);
+              break;
+            case "RESPONSE":
+              handleResponse(data);
+              break;
+            default:
+              console.log("[WS] Unknown message type:", type);
+          }
+        });
+    return () => {
+      disconnectWebSocket();
+    };
+  }, [auth.isAuthenticated]);
+
   if (!user) {
     return <div>Loading...</div>;
   }
-  
+
   return (
-    <div className="flex h-screen  overflow-hidden bg-gray-50 dark:bg-gray-900">
-    <Sidebar user={user} />
+    <div className="flex h-screen  overflow-hidden bg-gray-900">
+      <Sidebar user={user} />
       <main className="flex-1 p-8">
         <div className="mx-auto">
           <Outlet /> {/* Page content will render here */}
@@ -54,4 +94,3 @@ export const MainLayout = () => {
     </div>
   );
 };
-

@@ -11,6 +11,8 @@ const deviceStatusList = [];
 const updateDeviceStatus = (deviceId, updates) => {
     let device = deviceStatusList.find(d => d.deviceId === deviceId);
 
+    console.log(`Updating status for device ${deviceId} with updates:`, updates);
+
     if (!device) {
         device = new DeviceStatus(deviceId);
         Object.assign(device, updates);
@@ -18,8 +20,7 @@ const updateDeviceStatus = (deviceId, updates) => {
     }else{
         Object.assign(device, updates);
     }
-    
     console.log(`Device ${deviceId} status updated:`, device);
 };
 
-module.exports = { updateDeviceStatus, deviceStatusList };
+module.exports = { updateDeviceStatus, deviceStatusList, DeviceStatus };

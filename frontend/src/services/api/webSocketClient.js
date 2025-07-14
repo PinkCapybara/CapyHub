@@ -1,59 +1,53 @@
 let socket = null;
 let reconnectInterval = 3000;
-let onMessageCallback = null;
 const WS_URL = import.meta.env.VITE_WS_URL;
 
 export const connectWebSocket = (token, onMessage) => {
+  if (socket && socket.readyState === WebSocket.OPEN) return;
+
   if (!token) {
-    console.warn('[WS] No token provided, skipping connection');
+    console.log("[WS] No token provided, skipping connection");
     return;
   }
 
-  onMessageCallback = onMessage;
-  const url = `${import.meta.env.VITE_WS_URL}/ws?token=${token}`;
+  const url = `${WS_URL}/ws?token=${token}`;
   socket = new WebSocket(url);
 
   socket.onopen = () => {
-    console.log('[WS] Connected to', url);
+    console.log("[WS] Connected to", url);
   };
 
   socket.onmessage = (event) => {
     try {
       const message = JSON.parse(event.data);
-      if (typeof onMessageCallback === 'function') {
-        onMessageCallback(message);
+      if (typeof onMessage === "function") {
+        onMessage(message);
       }
     } catch (err) {
-      console.error('[WS] Failed to parse message', err);
+      console.error("[WS] Failed to parse message", err);
     }
   };
 
   socket.onerror = (error) => {
-    console.error('[WS] Error:', error);
+    console.error("[WS] Error:", error);
   };
 
   socket.onclose = (event) => {
-    console.warn('[WS] Disconnected:', event.reason);
+    console.log("[WS] Disconnected:", event.reason);
     // Attempt to reconnect
     setTimeout(() => connectWebSocket(token, onMessage), reconnectInterval);
   };
 };
 
-/**
- * Send a message over the WebSocket
- * @param {object} msg - message object to send
- */
+// never used
 export const sendMessage = (msg) => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(msg));
   } else {
-    console.warn('[WS] Cannot send message, socket not open');
+    console.log("[WS] Cannot send message, socket not open");
   }
 };
 
-/**
- * Close the WebSocket connection
- */
 export const disconnectWebSocket = () => {
   if (socket) {
     socket.close();

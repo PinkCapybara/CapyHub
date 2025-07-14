@@ -17,8 +17,8 @@ const checkNotificationConditions = async (element) => {
     else if (operator === "<" && element.value < thresholdValue) conditionMet = true;
 
     if (conditionMet) {
-      sendEmailAlert(rule.element, rule.condtion, rule.message, rule.email);
-      console.log(`Alert sent for ${deviceId}: ${rule.condition}`);
+      sendEmailAlert(rule.element, rule.condition, rule.message, rule.email);
+      console.log(`Alert sent for ${rule.element}: ${rule.condition}`);
     }
     
   })

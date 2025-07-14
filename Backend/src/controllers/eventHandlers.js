@@ -53,7 +53,9 @@ mqttEmitter.on("status", async (deviceId, data) => {
         if (!device) throw new Error(`Device with ID ${deviceId} not found`);
 
         console.log(`${device.name} is now: ${data}`);
-        const isOnline = data.toString() === "online";
+        const isOnline = data.trim().toLowerCase() === "online";
+
+        console.log(`Updating device status for ${deviceId} to online: ${isOnline}`);
 
         updateDeviceStatus(deviceId, { isOnline });
 

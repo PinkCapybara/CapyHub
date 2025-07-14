@@ -4,11 +4,10 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 const url = require('url');
 
-let wss;
-const clients = new Map(); // Store authenticated clients
+const clients = new Map(); 
 
 const initWebSocket = (server) => {
-  wss = new WebSocket.Server({ server });
+  const wss = new WebSocket.Server({ server });
 
   wss.on('connection', (ws, req) => {
     // Parse token from query string

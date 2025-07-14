@@ -1,13 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config({ path: ".env.local" });
 const apiRouter = require("./routes/index"); 
 const http = require('http');
 require('./controllers/eventHandlers'); // Register handlers first
 require('./mqtt/mqttClient'); // Then start MQTT connection
 const { initWebSocket } = require("./controllers/socketManager");
-
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -38,8 +38,8 @@ app.use((err, req, res, next) => {
 })
 
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 server.listen(3000, () => {
     console.log('Server & WebSocket running on port 3000');
